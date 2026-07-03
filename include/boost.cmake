@@ -1,0 +1,22 @@
+if(NOT DEFINED required_boost_libraries)
+  set(required_boost_libraries chrono filesystem locale log log_setup program_options regex system thread)
+endif()
+if(NOT DEFINED required_boost_version)
+  set(required_boost_version 1.76)
+endif()
+
+message(STATUS "required_boost_libraries: ${required_boost_libraries}")
+message(STATUS "required_boost_version: ${required_boost_version}")
+
+if(BOOST_REQUIRED)
+  find_package(Boost ${required_boost_version} REQUIRED CONFIG COMPONENTS ${required_boost_libraries})
+else()
+  find_package(Boost ${required_boost_version} CONFIG COMPONENTS ${required_boost_libraries})
+endif()
+
+if(Boost_FOUND)
+  message(STATUS "Boost include directories: ${Boost_INCLUDE_DIRS}")
+  message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
+  include_directories(BEFORE SYSTEM ${Boost_INCLUDE_DIRS})
+  add_compile_definitions(HAVE_BOOST=1)
+endif()
